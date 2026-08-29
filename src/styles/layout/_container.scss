@@ -1,0 +1,10 @@
+@use '../abstracts' as *;
+
+// The one container class for the whole product. Always centers content,
+// caps it at $container-max-width, and scales side padding by breakpoint:
+// 20px (mobile) → 30px (tablet, from $bp-md) → 60px (desktop, from $bp-xl).
+// Never add padding-inline / max-width ad hoc elsewhere — extend this
+// mixin (in abstracts/_mixins.scss) instead so every page stays in sync.
+.main-wrapper {
+  @include container;
+}

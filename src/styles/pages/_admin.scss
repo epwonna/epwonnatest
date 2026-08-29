@@ -1,0 +1,868 @@
+@use '../abstracts' as *;
+
+.admin-page {
+  padding: $space-5 0 $space-10;
+}
+
+.admin-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: $space-4;
+  margin-bottom: $space-6;
+
+  h1 {
+    font-size: 24px;
+
+    @include mq(sm) {
+      font-size: 28px;
+    }
+  }
+
+  p {
+    margin-top: 6px;
+    color: $color-gray;
+    font-size: 14px;
+  }
+}
+
+.admin-back {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  color: $color-gray;
+  margin-bottom: 10px;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+// ---- Section picker (/admin) -------------------------------------------
+.admin-section-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-5;
+
+  @include mq(sm) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Used both as a <Link> (AdminHome's exam picker) and as a <button>
+// (AdminTestEditor's section picker) — one merged rule block so
+// button-reset's background:none/border:none/padding:0 always get
+// overridden by the card look declared right after it, regardless of
+// which element it's applied to.
+.admin-section-card {
+  @include button-reset;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-6;
+  @include hover-lift;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-top: 4px;
+  }
+
+  p {
+    margin-top: 4px;
+    font-size: 13.5px;
+    color: $color-ink-soft;
+  }
+}
+
+.admin-section-card-label {
+  display: block;
+  font-size: 17px;
+  font-weight: 800;
+  color: $color-ink;
+}
+
+.admin-section-card-count {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: $color-ink-soft;
+}
+
+// Header shown once inside a section (title + way back to the picker).
+.admin-section-bar {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  margin-bottom: $space-5;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.admin-back-link {
+  @include button-reset;
+  font-size: 13px;
+  font-weight: 700;
+  color: $color-gray;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+// ---- Tests table --------------------------------------------------------
+.admin-table {
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  overflow: hidden;
+}
+
+.admin-table-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid $color-border;
+  font-size: 13.5px;
+  align-items: center;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @include mq(lg) {
+    grid-template-columns: 2fr 1fr 0.8fr 1fr 1fr 0.7fr 1.4fr;
+  }
+
+  &.with-phase {
+    @include mq(lg) {
+      grid-template-columns: 1.8fr 1fr 0.8fr 1fr 1fr 0.6fr 1fr 1.4fr;
+    }
+  }
+}
+
+.admin-table-head {
+  background: $color-bg;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: $color-gray;
+  display: none;
+
+  @include mq(lg) {
+    display: grid;
+  }
+}
+
+.admin-table-title {
+  font-weight: 700;
+  color: $color-ink;
+}
+
+.admin-table-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+
+  @include mq(lg) {
+    margin-top: 0;
+    justify-content: flex-end;
+  }
+}
+
+.admin-pill {
+  display: inline-flex;
+  width: fit-content;
+  padding: 3px 9px;
+  border-radius: $radius-pill;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: $color-bg;
+  color: $color-gray;
+  border: 1px solid $color-border;
+
+  &.official {
+    background: $color-green-light;
+    color: $color-green-dark;
+    border-color: transparent;
+  }
+}
+
+.admin-delete-btn {
+  @include button-reset;
+  width: 30px;
+  height: 30px;
+  border-radius: $radius-sm;
+  border: 1px solid $color-border;
+  color: $color-gray;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    border-color: #e3564f;
+    color: #b0332c;
+    background: #fde9e9;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// ---- Form: shared field styles -----------------------------------------
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-7;
+}
+
+.admin-fieldset {
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-6;
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+
+  span {
+    font-size: 13px;
+    font-weight: 700;
+    color: $color-ink;
+  }
+
+  em {
+    font-weight: 500;
+    font-style: normal;
+    color: $color-gray;
+  }
+
+  input,
+  textarea,
+  select {
+    font: inherit;
+    font-size: 16px;
+    padding: 11px 14px;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    background: #fff;
+    color: $color-ink;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    @include mq(sm) {
+      font-size: 14.5px;
+    }
+
+    &::placeholder {
+      color: $color-gray;
+    }
+
+    &:hover {
+      border-color: #c7cede;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba(34, 160, 107, 0.12);
+    }
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 34px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237A8699' stroke-width='1.6' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+  }
+
+  textarea {
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+  }
+}
+
+.admin-field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-4;
+
+  .admin-field {
+    min-width: 140px;
+  }
+}
+
+.admin-note {
+  font-size: 13px;
+  color: $color-gray;
+  background: $color-primary-light;
+  padding: 10px 14px;
+  border-radius: $radius-sm;
+}
+
+// ---- Question editor ----------------------------------------------------
+.admin-questions {
+  h2,
+  h3 {
+    font-size: 18px;
+    margin-bottom: $space-4;
+  }
+}
+
+.admin-question-card {
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-bottom: $space-4;
+}
+
+.admin-question-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-question-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: $color-primary;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.admin-image-preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: $radius-sm;
+    border: 1px solid $color-border;
+  }
+}
+
+.admin-file-chip {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: $color-ink;
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  padding: 9px 14px;
+}
+
+.admin-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-options-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: $color-ink;
+
+  em {
+    font-weight: 500;
+    font-style: normal;
+    color: $color-gray;
+  }
+}
+
+.admin-option-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+    accent-color: $color-green;
+    flex-shrink: 0;
+  }
+}
+
+.admin-option-text {
+  flex: 1;
+  font: inherit;
+  font-size: 14px;
+  padding: 9px 12px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  background: $color-bg;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.admin-tf-select {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 10px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  background: #fff;
+  flex-shrink: 0;
+  width: 110px;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.admin-add-link {
+  @include button-reset;
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 700;
+  color: $color-primary;
+  padding: 6px 0;
+
+  &:hover {
+    color: $color-primary-dark;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.admin-add-question-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 12px;
+  position: sticky;
+  bottom: 0;
+  background: $color-bg;
+  padding: $space-4 0;
+}
+
+// ---- Multi-part question editor -----------------------------------------
+// ---- Reading/listening passages -------------------------------------------
+.admin-passages {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-bottom: $space-6;
+
+  h3 {
+    font-size: 18px;
+    margin-bottom: 0;
+  }
+}
+
+.admin-passage-card {
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.admin-passage-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-passage-card textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.6;
+  padding: 10px 12px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  background: #fff;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+// ---- Cloze (Lückentext) editor --------------------------------------------
+.admin-cloze-editor {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.admin-cloze-editor textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.7;
+  padding: 12px 14px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-md;
+  background: #fff;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.admin-cloze-blanks {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.admin-cloze-blank-card {
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  .admin-qa-row-head {
+    justify-content: flex-start;
+    gap: 10px;
+
+    select {
+      width: auto;
+    }
+  }
+}
+
+.admin-cloze-example {
+  border-top: 1px solid $color-border;
+  padding-top: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+// ---- qa_table (2-column table) editor -------------------------------------
+.admin-qa-editor {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.admin-qa-row {
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.admin-qa-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .admin-cell-toggle {
+    display: inline-block;
+    width: auto;
+    margin-bottom: 0;
+    padding: 5px 12px;
+  }
+}
+
+.admin-qa-row textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  background: #fff;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.admin-tf-words {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+
+  @include mq(sm) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  input {
+    width: 100%;
+    font: inherit;
+    font-size: 13px;
+    padding: 8px 10px;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-sm;
+    background: #fff;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+  }
+}
+
+.admin-multipart {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.admin-part-card {
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.admin-part-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  select {
+    width: auto;
+    flex-shrink: 0;
+    padding: 9px 28px 9px 12px;
+  }
+}
+
+.admin-part-example-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $color-ink-soft;
+  cursor: pointer;
+
+  input {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+}
+
+.admin-single-choice-editor {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.admin-single-choice-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    flex: 1;
+    font: inherit;
+    font-size: 13.5px;
+    padding: 9px 12px;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-sm;
+    background: #fff;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+  }
+}
+
+.admin-part-index {
+  width: 26px;
+  height: 26px;
+  border-radius: $radius-sm;
+  background: $color-primary-light;
+  color: $color-primary-dark;
+  font-weight: 800;
+  font-size: 12.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-part-label-input {
+  flex: 1;
+  min-width: 120px;
+  font: inherit;
+  font-size: 13.5px;
+  padding: 9px 12px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  background: #fff;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.admin-add-part-row {
+  display: flex;
+  gap: $space-4;
+}
+
+// ---- Table part editor -----------------------------------------------------
+.admin-table-editor-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-table-editor table {
+  border-collapse: collapse;
+  min-width: 100%;
+
+  th,
+  td {
+    border: 1px solid $color-border;
+    padding: 6px;
+    vertical-align: top;
+  }
+
+  thead th,
+  tbody th {
+    background: #fff;
+  }
+
+  th input {
+    width: 100px;
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 6px 8px;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-sm;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+  }
+}
+
+.admin-table-editor-remove {
+  @include button-reset;
+  display: block;
+  margin: 4px auto 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: $color-gray;
+
+  &:hover {
+    color: #b0332c;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.admin-cell-toggle {
+  @include button-reset;
+  display: block;
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 4px 6px;
+  border-radius: $radius-sm;
+  background: $color-amber-light;
+  color: $color-amber-dark;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-align: center;
+
+  &.given {
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+}
+
+.admin-table-editor td input {
+  width: 76px;
+  font: inherit;
+  font-size: 12.5px;
+  padding: 6px 8px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.admin-cell-answer-row {
+  display: flex;
+  gap: 4px;
+
+  input {
+    width: 56px;
+
+    &:last-child {
+      width: 44px;
+    }
+  }
+}
+
+.admin-table-editor-actions {
+  display: flex;
+  gap: $space-4;
+  margin-top: 4px;
+}

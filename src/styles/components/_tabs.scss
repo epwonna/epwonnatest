@@ -1,0 +1,36 @@
+@use '../abstracts' as *;
+
+.exam-tabs {
+  display: flex;
+  gap: 6px;
+  border-bottom: 1px solid $color-border;
+  margin: 16px 0 18px;
+
+  @include mq(sm) {
+    margin: 20px 0 22px;
+  }
+}
+
+.exam-tab {
+  padding: 10px 4px;
+  margin-right: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  color: $color-gray;
+  border-bottom: 2.5px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  @include mq(sm) {
+    margin-right: 26px;
+    font-size: 15px;
+  }
+
+  &.active {
+    color: $color-ink;
+    border-color: currentColor;
+  }
+
+  &:hover {
+    color: $color-ink;
+  }
+}

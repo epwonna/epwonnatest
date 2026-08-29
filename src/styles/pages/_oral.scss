@@ -1,0 +1,300 @@
+@use '../abstracts' as *;
+
+.oral-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: $space-5 0 $space-10;
+}
+
+.oral-stage-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border: 1px solid $color-border;
+  border-radius: $radius-pill;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $color-ink-soft;
+  margin: $space-4 0 $space-4;
+}
+
+.oral-stage-title {
+  font-size: 24px;
+}
+
+.oral-instructions {
+  margin-top: 10px;
+  font-size: 14.5px;
+  color: $color-ink-soft;
+  line-height: 1.6;
+}
+
+// ---- Stage 1 of 2: choose a card ------------------------------------------
+.oral-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-5;
+  margin-top: $space-6;
+
+  @include mq(sm) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.oral-choice-card {
+  @include button-reset;
+  text-align: left;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-6;
+  @include hover-lift;
+
+  h3 {
+    font-size: 16px;
+    font-weight: 800;
+    margin: $space-4 0 6px;
+  }
+
+  p {
+    font-size: 13.5px;
+    color: $color-ink-soft;
+    line-height: 1.5;
+  }
+}
+
+// ---- Materials (quote / chart / photo) ------------------------------------
+.oral-workspace {
+  margin-top: $space-6;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-6;
+}
+
+.oral-back-to-choice {
+  @include button-reset;
+  display: inline-block;
+  margin-bottom: $space-5;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $color-gray;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.oral-materials {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+
+  &.multi {
+    @include mq(sm) {
+      flex-direction: row;
+    }
+  }
+}
+
+.oral-quote {
+  margin: 0;
+  padding: $space-5;
+  background: $color-bg;
+  border-left: 3px solid $color-primary;
+  border-radius: $radius-sm;
+  font-size: 17px;
+  font-style: italic;
+  color: $color-ink;
+  line-height: 1.5;
+}
+
+.oral-photo-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 180px;
+  background: $color-bg;
+  border: 1.5px dashed $color-border;
+  border-radius: $radius-md;
+  color: $color-gray;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.oral-prompt {
+  margin-top: $space-5;
+  font-size: 15px;
+  font-weight: 700;
+  color: $color-ink;
+}
+
+// ---- Prep timer -----------------------------------------------------------
+.oral-prep-panel {
+  margin-top: $space-6;
+  padding-top: $space-6;
+  border-top: 1px solid $color-border;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+}
+
+.oral-prep-timer {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.oral-prep-timer-value {
+  font-family: $font-display;
+  font-weight: 800;
+  font-size: 32px;
+  color: $color-ink;
+  font-variant-numeric: tabular-nums;
+}
+
+.oral-prep-timer-label {
+  font-size: 13px;
+  color: $color-gray;
+}
+
+.oral-prep-actions {
+  display: flex;
+  gap: 10px;
+}
+
+// ---- Present panel ----------------------------------------------------------
+.oral-present-panel {
+  margin-top: $space-6;
+  padding-top: $space-6;
+  border-top: 1px solid $color-border;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+}
+
+.oral-present-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: $color-primary-dark;
+}
+
+// ---- Disclaimer -------------------------------------------------------------
+.oral-disclaimer {
+  margin-top: $space-6;
+  padding: 14px 18px;
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  font-size: 12.5px;
+  color: $color-gray;
+  line-height: 1.5;
+  text-align: center;
+}
+
+// ---- Choice card thumbnail / text preview ---------------------------------
+.oral-choice-thumb {
+  margin-top: $space-4;
+  border-radius: $radius-md;
+  overflow: hidden;
+  height: 140px;
+
+  .question-image {
+    margin-top: 0;
+    max-width: none;
+    height: 100%;
+  }
+
+  img,
+  svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.oral-choice-preview {
+  margin-top: $space-4;
+  font-size: 13px;
+  color: $color-ink-soft;
+  line-height: 1.5;
+}
+
+// ---- Text excerpt material (Kurztext / Zitat-style multi-quote text) ------
+.oral-text-excerpt {
+  flex: 1;
+  background: $color-bg;
+  border-radius: $radius-md;
+  padding: $space-5;
+
+  h3 {
+    font-size: 15px;
+    margin-bottom: $space-3;
+    text-align: center;
+  }
+}
+
+.oral-text-excerpt-body {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: $color-ink;
+  white-space: pre-line;
+}
+
+// ---- Guiding questions (Leitfragen) ----------------------------------------
+.oral-leitfragen {
+  margin: $space-4 0 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: $color-ink;
+}
+
+// ---- Exam-info intro screen (shown once per exam, dismissible) ------------
+.oral-intro-screen {
+  margin-top: $space-6;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-6;
+}
+
+.oral-intro-model-note {
+  margin-bottom: $space-5;
+  padding: 12px 16px;
+  background: $color-blue-light;
+  border-radius: $radius-md;
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-blue-dark;
+  line-height: 1.5;
+}
+
+.oral-intro-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: $color-ink;
+  white-space: pre-line;
+}
+
+.oral-intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: $space-6;
+  padding-top: $space-5;
+  border-top: 1px solid $color-border;
+}

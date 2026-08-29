@@ -1,0 +1,200 @@
+@use '../abstracts' as *;
+
+// ---- Словарь page ----------------------------------------------------
+.dict-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dict-category-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: $color-gray;
+  letter-spacing: 0.04em;
+  margin: $space-6 0 $space-3;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.dict-word-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: $space-3;
+}
+
+.dict-word-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: 16px 18px;
+}
+
+.dict-word-term {
+  font-size: 16px;
+  font-weight: 800;
+  color: $color-ink;
+}
+
+.dict-word-translation {
+  margin-top: 3px;
+  font-size: 13.5px;
+  color: $color-ink-soft;
+}
+
+.dict-word-example {
+  margin-top: 6px;
+  font-size: 12.5px;
+  font-style: italic;
+  color: $color-gray;
+}
+
+.dict-word-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+
+  button {
+    @include button-reset;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-sm;
+    color: $color-gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: $color-bg;
+      color: $color-ink;
+    }
+
+    &:last-child:hover {
+      background: #fde9e9;
+      color: #b0332c;
+    }
+  }
+}
+
+.dict-empty {
+  background: #fff;
+  border: 1px dashed $color-border;
+  border-radius: $radius-lg;
+  padding: $space-9 $space-5;
+  text-align: center;
+  color: $color-gray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-4;
+
+  p {
+    max-width: 420px;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+}
+
+// ---- Add/edit word modal ----------------------------------------------
+.word-modal {
+  max-width: 460px;
+
+  h2 {
+    font-size: 19px;
+    margin-bottom: $space-5;
+  }
+
+  .admin-field {
+    margin-bottom: $space-4;
+  }
+}
+
+.word-modal-row {
+  display: flex;
+  gap: 8px;
+
+  input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+
+.word-modal-error {
+  font-size: 12.5px;
+  color: #b0332c;
+  margin-bottom: $space-3;
+}
+
+// ---- Global text-selection popup --------------------------------------
+.selection-popup {
+  position: fixed;
+  z-index: 300;
+  transform: translate(-50%, calc(-100% - 10px));
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+  padding: 6px;
+  max-width: min(280px, calc(100vw - 24px));
+}
+
+.selection-popup-actions {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    @include button-reset;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: $radius-sm;
+    font-size: 13px;
+    font-weight: 600;
+    color: $color-ink;
+    text-align: left;
+    white-space: nowrap;
+
+    &:hover {
+      background: $color-bg;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+
+  .selection-popup-highlight {
+    color: #b0651c;
+  }
+}
+
+.selection-popup-result {
+  margin-top: 4px;
+  padding: 8px 10px;
+  border-top: 1px solid $color-border;
+  font-size: 13px;
+  color: $color-ink-soft;
+  line-height: 1.4;
+}
+
+.selection-highlight {
+  background: #ffe6ad;
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}

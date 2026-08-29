@@ -1,0 +1,1750 @@
+@use '../abstracts' as *;
+
+// =============================================================
+// TEST-TAKING PAGE (shared by EPM / EPD / EPE)
+// =============================================================
+
+.test-page {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-6;
+  padding: $space-5 0 $space-10;
+
+  @include mq(lg) {
+    grid-template-columns: 300px 1fr;
+    gap: $space-7;
+    align-items: start;
+  }
+
+  &.nav-collapsed {
+    @include mq(lg) {
+      grid-template-columns: 56px 1fr;
+    }
+  }
+}
+
+// ---- Right panel: view switcher (Текст / Задание / оба) -----------------
+// A question that belongs to a shared reading passage (question.passageId)
+// can show the passage, the question, or both — see the view state in
+// TestPage.jsx. Not a separate grid column anymore; it's all one panel.
+.test-view-switch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: $color-bg;
+  border-radius: $radius-md;
+  margin-bottom: $space-5;
+}
+
+.test-view-tab {
+  @include button-reset;
+  padding: 7px 14px;
+  border-radius: $radius-sm;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $color-ink-soft;
+
+  &.active {
+    background: #fff;
+    color: $color-ink;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  }
+
+  &:hover:not(.active) {
+    color: $color-ink;
+  }
+}
+
+.test-view-float-btn {
+  padding: 7px 12px;
+  font-size: 14px;
+}
+
+.test-passage-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: $color-ink-soft;
+  white-space: pre-line;
+}
+
+// Standalone full-width reading view (view === 'text') — flows with the
+// page like any other content, no fixed height/scrollbar.
+.test-passage-full {
+  h3 {
+    font-size: 18px;
+    margin-bottom: $space-3;
+  }
+}
+
+// ---- Left: question navigator ----------------------------------------
+.test-nav {
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-5;
+  position: static;
+
+  @include mq(lg) {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  &.collapsed {
+    @include mq(lg) {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: $space-4 0;
+    }
+  }
+}
+
+.test-nav-expand {
+  @include button-reset;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-sm;
+  background: $color-bg;
+  color: $color-ink-soft;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: $color-blue-light;
+    color: $color-primary-dark;
+  }
+}
+
+.test-nav-collapse {
+  @include button-reset;
+  display: none;
+  width: 100%;
+  margin-top: $space-4;
+  padding: 8px;
+  border-radius: $radius-sm;
+  font-size: 12px;
+  font-weight: 700;
+  color: $color-gray;
+  text-align: center;
+
+  &:hover {
+    color: $color-primary;
+    background: $color-bg;
+  }
+
+  @include mq(lg) {
+    display: block;
+  }
+}
+
+.test-nav-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.test-nav-back {
+  @include button-reset;
+  font-weight: 700;
+  font-size: 12.5px;
+  color: $color-gray;
+
+  &:hover {
+    color: $color-ink;
+  }
+}
+
+.test-nav-title {
+  font-size: 17px;
+  margin-top: 4px;
+}
+
+// Compact inline timer that sits next to "Вопросы" instead of its own
+// full-width block — matches the small "00:40 ❚❚" from the reference.
+.test-timer-compact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.test-timer-value {
+  font-family: $font-display;
+  font-weight: 700;
+  font-size: 14px;
+  color: $color-ink-soft;
+  font-variant-numeric: tabular-nums;
+
+  &.low {
+    color: #d33a3a;
+  }
+}
+
+.test-timer-pause {
+  @include button-reset;
+  width: 26px;
+  height: 26px;
+  border-radius: $radius-sm;
+  background: #fff;
+  border: 1px solid $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: $color-ink-soft;
+
+  &:hover {
+    background: $color-primary-light;
+  }
+}
+
+.test-paused-note {
+  font-size: 12px;
+  color: $color-gray;
+  margin: 6px 0 0;
+}
+
+.test-nav-progress-label {
+  font-size: 12.5px;
+  color: $color-gray;
+  margin-top: 10px;
+}
+
+.test-progress-bar {
+  height: 6px;
+  border-radius: $radius-pill;
+  background: $color-bg;
+  overflow: hidden;
+  margin-top: 6px;
+  margin-bottom: $space-5;
+}
+
+.test-progress-bar-fill {
+  height: 100%;
+  border-radius: $radius-pill;
+  transition: width 0.2s ease;
+}
+
+// ---- Question groups (categories) ---------------------------------------
+.question-group {
+  margin-bottom: $space-4;
+}
+
+.question-group-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: $color-gray;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.question-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.q-num {
+  @include button-reset;
+  aspect-ratio: 1;
+  border-radius: $radius-sm;
+  border: 1.5px solid $color-border;
+  background: #fff;
+  color: $color-ink-soft;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+
+  &.current {
+    border-color: $color-blue;
+    box-shadow: 0 0 0 3px rgba(48, 89, 232, 0.15);
+  }
+
+  &.correct {
+    background: $color-green-light;
+    border-color: $color-green;
+    color: $color-green-dark;
+  }
+
+  &.partial {
+    background: $color-amber-light;
+    border-color: $color-amber;
+    color: $color-amber-dark;
+  }
+
+  &.incorrect {
+    background: #fde9e9;
+    border-color: #e3564f;
+    color: #b0332c;
+  }
+
+  &.ungraded {
+    background: $color-blue-light;
+    border-color: $color-blue;
+    color: $color-blue-dark;
+  }
+}
+
+// ---- Legend: outlined squares, matching the reference -------------------
+.test-finish-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+// ---- Right: question + options ----------------------------------------
+.test-main {
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-6;
+
+  @include mq(sm) {
+    padding: 34px;
+  }
+
+  @include mq(lg) {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
+
+// Small bordered pill, e.g. "Вопрос 1 из 26" — sits above the question,
+// separate from the uppercase "ВОПРОС" micro-label under it.
+
+// Small uppercase grey label used above the question text and above the
+// options list ("ВОПРОС" / "ВАРИАНТЫ ОТВЕТОВ").
+.test-microlabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: $color-gray;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.test-options-label {
+  margin-top: $space-6;
+  margin-bottom: 10px;
+}
+
+.test-question-text {
+  font-size: 17px;
+  line-height: 1.4;
+  white-space: pre-line;
+
+  @include mq(sm) {
+    font-size: 19px;
+  }
+}
+
+.test-explanation {
+  margin-top: 8px;
+  font-size: 13px;
+  color: $color-gray;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.question-image {
+  margin-top: $space-5;
+  max-width: 560px;
+
+  img,
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: $radius-sm;
+  }
+}
+
+// ---- Options: flat divided rows (not boxed cards) ------------------------
+.options-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 4px;
+  border-bottom: 1px solid $color-border;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: $color-bg;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .option-mark {
+    width: 19px;
+    height: 19px;
+    border-radius: 5px;
+    border: 1.5px solid $color-border;
+    flex-shrink: 0;
+    position: relative;
+    background: #fff;
+  }
+
+  input:checked + .option-mark {
+    border-color: $color-primary;
+    background: $color-primary;
+  }
+  input:checked + .option-mark::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(40deg);
+  }
+
+  .option-text {
+    font-size: 13.5px;
+    color: $color-ink;
+  }
+
+  &.option-correct {
+    background: $color-green-light;
+
+    input:checked + .option-mark {
+      background: $color-green;
+      border-color: $color-green;
+    }
+  }
+
+  &.option-wrong {
+    background: #fde9e9;
+
+    input:checked + .option-mark {
+      background: #e3564f;
+      border-color: #e3564f;
+    }
+  }
+
+  &.option-missed {
+    background: $color-amber-light;
+  }
+
+  &.locked {
+    cursor: default;
+
+    &:hover {
+      background: transparent;
+    }
+    &.option-correct:hover {
+      background: $color-green-light;
+    }
+    &.option-wrong:hover {
+      background: #fde9e9;
+    }
+    &.option-missed:hover {
+      background: $color-amber-light;
+    }
+  }
+}
+
+// ---- Radio variant (single_choice parts inside multi_part) ---------------
+// Same .option/.option-mark classes as the checkbox-based multiple_choice
+// above, just round instead of square, and a dot instead of a checkmark
+// tick. The "example" rendering has no real <input> at all (read-only,
+// correct answer already marked) — the `.option-correct > .option-mark`
+// child-combinator rule handles coloring that dot without needing
+// `input:checked` to be present.
+.option-mark.radio {
+  border-radius: 50%;
+}
+
+// Shown as soon as an option is picked, before grading is revealed.
+input:checked + .option-mark.radio::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: $color-primary;
+}
+
+// Read-only "example" rendering has no <input> at all (correct answer
+// already marked) — same dot, shown directly via the correct option's
+// own class instead of an input:checked state.
+.option-correct > .option-mark.radio::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: $color-green;
+}
+
+// Once graded, recolor the interactive dot to match the verdict.
+.option-correct input:checked + .option-mark.radio::after {
+  background: $color-green;
+}
+.option-wrong input:checked + .option-mark.radio::after {
+  background: #e3564f;
+}
+
+.single-choice.example .option {
+  cursor: default;
+}
+
+.test-autosave-hint {
+  margin-top: $space-5;
+  font-size: 12.5px;
+  color: $color-gray;
+}
+
+.test-feedback {
+  margin-top: $space-5;
+  padding: 12px 16px;
+  border-radius: $radius-md;
+  font-size: 13.5px;
+  font-weight: 600;
+
+  &.correct {
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.partial {
+    background: $color-amber-light;
+    color: $color-amber-dark;
+  }
+  &.incorrect {
+    background: #fde9e9;
+    color: #b0332c;
+  }
+  &.ungraded {
+    background: $color-blue-light;
+    color: $color-blue-dark;
+  }
+}
+
+.test-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: $space-7;
+  padding-top: $space-6;
+  border-top: 1px solid $color-border;
+}
+
+// ---- Numeric answer (math) ----------------------------------------------
+.numeric-answer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: $space-4;
+}
+
+.numeric-answer-input {
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  width: 160px;
+  padding: 12px 14px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  color: $color-ink;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &.locked {
+    background: $color-bg;
+  }
+  &.correct {
+    border-color: $color-green;
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.wrong {
+    border-color: #e3564f;
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.numeric-answer-unit {
+  font-size: 14px;
+  color: $color-gray;
+  font-weight: 600;
+}
+
+.numeric-answer-hint {
+  flex-basis: 100%;
+  font-size: 12.5px;
+  color: $color-gray;
+}
+
+// ---- True / False statements ---------------------------------------------
+.tf-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: $space-4;
+}
+
+.tf-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 4px;
+  border-bottom: 1px solid $color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &.tf-correct {
+    background: $color-green-light;
+  }
+  &.tf-wrong {
+    background: #fde9e9;
+  }
+}
+
+.tf-text {
+  font-size: 14.5px;
+  color: $color-ink;
+  flex: 1;
+  min-width: 200px;
+}
+
+.tf-toggle {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.tf-btn {
+  @include button-reset;
+  padding: 7px 14px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-pill;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $color-ink-soft;
+  background: #fff;
+
+  &.active {
+    border-color: $color-blue;
+    background: $color-blue-light;
+    color: $color-blue-dark;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+// ---- Heading match (reading task) -----------------------------------------
+.heading-match-answer {
+  margin-top: $space-4;
+}
+
+.heading-match-input {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  width: 100%;
+  max-width: 320px;
+  padding: 12px 14px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  color: $color-ink;
+  letter-spacing: 0.04em;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &.locked {
+    background: $color-bg;
+  }
+  &.correct {
+    border-color: $color-green;
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.wrong {
+    border-color: #e3564f;
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.heading-match-hint {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: $color-gray;
+}
+
+// ---- tf_table ("Richtig-Falsch mit Belegsatz") ----------------------------
+.tf-evidence-wrap {
+  margin-top: $space-4;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tf-evidence-table {
+  border-collapse: collapse;
+  min-width: 100%;
+
+  th,
+  td {
+    border: 1px solid $color-border;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 12.5px;
+  }
+
+  thead th {
+    background: $color-bg;
+    font-weight: 700;
+    color: $color-ink-soft;
+    white-space: nowrap;
+  }
+}
+
+.tf-evidence-statement-head {
+  min-width: 200px;
+}
+
+.tf-evidence-statement {
+  text-align: left;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: $color-ink;
+  min-width: 220px;
+}
+
+.tf-evidence-example {
+  background: $color-bg;
+
+  .tf-evidence-statement {
+    font-style: italic;
+    color: $color-ink-soft;
+  }
+}
+
+.tf-evidence-choice-cell {
+  width: 48px;
+}
+
+.tf-evidence-choice {
+  @include button-reset;
+  width: 28px;
+  height: 28px;
+  border-radius: $radius-sm;
+  border: 1.5px solid $color-border;
+  font-weight: 800;
+  color: $color-ink;
+
+  &.selected {
+    border-color: $color-primary;
+    background: $color-blue-light;
+    color: $color-primary-dark;
+  }
+
+  &.correct {
+    border-color: $color-green;
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.incorrect {
+    border-color: #e3564f;
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.tf-evidence-x {
+  font-weight: 800;
+  color: $color-ink;
+}
+
+.tf-evidence-word-cell {
+  width: 90px;
+}
+
+.tf-evidence-word-input {
+  width: 100%;
+  font: inherit;
+  font-size: 12.5px;
+  text-align: center;
+  padding: 6px 4px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  color: $color-ink;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &.locked {
+    background: $color-bg;
+  }
+}
+
+// ---- qa_table (2-column: prompt | short-answer, per row) -----------------
+.qa-table-wrap {
+  margin-top: $space-4;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.qa-table {
+  border-collapse: collapse;
+  width: 100%;
+
+  td {
+    border: 1px solid $color-border;
+    padding: 12px 14px;
+    vertical-align: middle;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  u {
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+  }
+}
+
+.qa-table-prompt {
+  width: 65%;
+  color: $color-ink;
+}
+
+.qa-table-answer {
+  position: relative;
+}
+
+.qa-table-example {
+  background: $color-bg;
+
+  .qa-table-prompt,
+  .qa-table-answer {
+    font-style: italic;
+    color: $color-ink-soft;
+  }
+}
+
+.qa-table-example-label {
+  font-weight: 700;
+  font-style: normal;
+  color: $color-ink;
+}
+
+.qa-table-given {
+  font-weight: 700;
+}
+
+.qa-table-input {
+  width: 100%;
+  font: inherit;
+  font-size: 14px;
+  padding: 8px 10px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  color: $color-ink;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &.locked {
+    background: $color-bg;
+  }
+  &.correct {
+    border-color: $color-green;
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.wrong {
+    border-color: #e3564f;
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.qa-table-hint {
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: $color-green-dark;
+}
+
+.qa-table-freetext {
+  width: 100%;
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.6;
+  padding: 10px 12px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  color: $color-ink;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &.locked {
+    background: $color-bg;
+  }
+}
+
+.qa-table-after {
+  margin-top: 6px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: $color-ink-soft;
+}
+
+.qa-table-points {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: 700;
+  color: $color-ink-soft;
+  background: $color-bg;
+}
+
+// ---- Cloze (inline fill-in-the-blank paragraph) ---------------------------
+.cloze-choice-table-wrap {
+  margin-top: $space-4;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cloze-choice-table {
+  border-collapse: collapse;
+  width: 100%;
+
+  td {
+    border: 1px solid $color-border;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: $color-ink;
+    white-space: nowrap;
+  }
+}
+
+.cloze-choice-label {
+  font-weight: 700;
+  background: $color-bg;
+  width: 1%;
+}
+
+.cloze-choice-example {
+  background: $color-bg;
+}
+
+.cloze-choice-correct {
+  font-weight: 700;
+  text-decoration: underline;
+  color: $color-ink;
+}
+
+.cloze-select {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 3px 6px;
+  margin: 0 2px;
+  border: none;
+  border-bottom: 2px solid $color-border;
+  background: $color-bg;
+  color: $color-ink;
+  border-radius: 4px 4px 0 0;
+  max-width: 220px;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: $color-primary;
+    background: $color-blue-light;
+  }
+
+  &.locked {
+    background: $color-bg;
+  }
+  &.correct {
+    border-bottom-color: $color-green;
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.wrong {
+    border-bottom-color: #e3564f;
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.cloze-word-bank {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: $color-border;
+  margin-top: $space-4;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: hidden;
+
+  @include mq(sm) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.cloze-word {
+  padding: 10px 14px;
+  font-size: 13.5px;
+  font-style: italic;
+  font-weight: 600;
+  color: $color-ink;
+  background: #fff;
+
+  &.used {
+    text-decoration: line-through;
+    color: $color-gray;
+  }
+}
+
+.cloze-text {
+  margin-top: $space-4;
+  font-size: 13.5px;
+  line-height: 2.1;
+  color: $color-ink;
+  white-space: pre-line;
+}
+
+.cloze-blank-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  position: relative;
+  white-space: nowrap;
+}
+
+.cloze-blank {
+  display: inline-block;
+}
+
+.cloze-input {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  padding: 3px 8px;
+  margin: 0 2px;
+  border: none;
+  border-bottom: 2px solid $color-border;
+  background: $color-bg;
+  color: $color-ink;
+  border-radius: 4px 4px 0 0;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: $color-primary;
+    background: $color-blue-light;
+  }
+
+  &.locked {
+    background: $color-bg;
+  }
+  &.correct {
+    border-bottom-color: $color-green;
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.wrong {
+    border-bottom-color: #e3564f;
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.cloze-blank-num {
+  font-size: 10px;
+  color: $color-gray;
+  margin-left: 1px;
+}
+
+.cloze-blank-hint {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  white-space: nowrap;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: $color-green-dark;
+  background: $color-green-light;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 2px;
+  z-index: 2;
+}
+
+// ---- Short answer (fill-in-the-blank word/phrase) -------------------------
+.short-answer-answer {
+  margin-top: $space-4;
+}
+
+.short-answer-input {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  width: 100%;
+  max-width: 320px;
+  padding: 12px 14px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  color: $color-ink;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &.locked {
+    background: $color-bg;
+  }
+  &.correct {
+    border-color: $color-green;
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.wrong {
+    border-color: #e3564f;
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.short-answer-hint {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: $color-gray;
+}
+
+// ---- Free text (essay / writing tasks) ------------------------------------
+.free-text-answer {
+  margin-top: $space-4;
+}
+
+.free-text-answer textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 14.5px;
+  line-height: 1.6;
+  padding: 14px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-md;
+  color: $color-ink;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &:disabled {
+    background: $color-bg;
+  }
+}
+
+.free-text-note {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: $color-gray;
+}
+
+// ---- essay_choice (Schreibaufgabe: pick one of two prompts, write) -------
+.essay-choice-picker {
+  margin-top: $space-4;
+}
+
+.essay-choice-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-4;
+  margin-top: $space-4;
+
+  @include mq(sm) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.essay-choice-card {
+  @include button-reset;
+  text-align: left;
+  background: #fff;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  @include hover-lift;
+
+  &:hover {
+    border-color: $color-primary;
+  }
+}
+
+.essay-choice-card-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: $color-ink;
+}
+
+.essay-choice-card-preview {
+  font-size: 12.5px;
+  color: $color-ink-soft;
+  line-height: 1.5;
+}
+
+.essay-choice-answer {
+  margin-top: $space-4;
+}
+
+.essay-choice-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: $space-4;
+}
+
+.essay-choice-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: $color-ink;
+}
+
+.essay-choice-switch {
+  @include button-reset;
+  font-size: 12px;
+  font-weight: 700;
+  color: $color-gray;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.essay-choice-excerpt {
+  background: $color-bg;
+  border-radius: $radius-md;
+  padding: $space-4;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: $color-ink;
+  white-space: pre-line;
+  margin-bottom: $space-4;
+}
+
+.essay-choice-instructions {
+  margin: $space-4 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: $color-ink;
+}
+
+.essay-choice-textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.7;
+  padding: 14px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-md;
+  color: $color-ink;
+  resize: vertical;
+  margin-top: $space-4;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &:disabled {
+    background: $color-bg;
+  }
+}
+
+// ---- Multi-part questions (shared stem + independently graded parts,
+// e.g. "a) fill in the table, b) i.–iv. compute these probabilities")
+// ---------------------------------------------------------------------
+.multi-part {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+  margin-top: $space-4;
+}
+
+.multi-part-item {
+  padding-top: $space-5;
+  border-top: 1px solid $color-border;
+
+  &:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+}
+
+// In paginated mode the visible item isn't literally the DOM's first
+// child (the pager comes before it) — always drop the divider there,
+// since there's only ever one item on screen at a time anyway.
+.multi-part.paginated .multi-part-item {
+  padding-top: 0;
+  border-top: none;
+}
+
+.multi-part-pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: $space-5;
+}
+
+.multi-part-pager-num {
+  @include button-reset;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  border: 1.5px solid $color-border;
+  background: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: $color-ink-soft;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: $color-primary;
+  }
+
+  &.current {
+    border-color: $color-blue;
+    box-shadow: 0 0 0 3px rgba(48, 89, 232, 0.15);
+  }
+  &.answered {
+    background: $color-bg;
+    color: $color-ink;
+  }
+  &.example {
+    border-style: dashed;
+  }
+  &.correct {
+    background: $color-green-light;
+    border-color: $color-green;
+    color: $color-green-dark;
+  }
+  &.partial {
+    background: $color-amber-light;
+    border-color: $color-amber;
+    color: $color-amber-dark;
+  }
+  &.incorrect {
+    background: #fde9e9;
+    border-color: #e3564f;
+    color: #b0332c;
+  }
+}
+
+
+.multi-part-label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  color: $color-ink;
+  margin-bottom: $space-3;
+}
+
+.multi-part-verdict {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: $radius-pill;
+
+  &.correct {
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.partial {
+    background: $color-amber-light;
+    color: $color-amber-dark;
+  }
+  &.incorrect {
+    background: #fde9e9;
+    color: #b0332c;
+  }
+  &.ungraded {
+    background: $color-blue-light;
+    color: $color-blue-dark;
+  }
+}
+
+.multi-part-freetext {
+  width: 100%;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 12px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-md;
+  color: $color-ink;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &:disabled {
+    background: $color-bg;
+  }
+}
+
+// ---- Fillable table (a "table"-type part inside multi_part) --------------
+.answer-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.answer-table {
+  border-collapse: collapse;
+  min-width: 100%;
+
+  th,
+  td {
+    border: 1px solid $color-border;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  thead th {
+    background: $color-bg;
+    font-weight: 700;
+    color: $color-ink-soft;
+    font-size: 12px;
+  }
+
+  tbody th {
+    background: $color-bg;
+    font-weight: 700;
+    color: $color-ink;
+    text-align: left;
+  }
+}
+
+.answer-table-given {
+  background: #fff;
+  font-weight: 700;
+  color: $color-ink-soft;
+}
+
+.answer-table-cell {
+  padding: 6px !important;
+
+  input {
+    width: 76px;
+    font: inherit;
+    font-size: 13px;
+    text-align: center;
+    padding: 8px 6px;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-sm;
+    color: $color-ink;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+
+    &:disabled {
+      background: $color-bg;
+    }
+  }
+
+  &.correct input {
+    border-color: $color-green;
+    background: $color-green-light;
+    color: $color-green-dark;
+  }
+  &.wrong input {
+    border-color: #e3564f;
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.answer-table-hint {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  color: $color-green-dark;
+}
+
+// ---- Results screen ----------------------------------------------------
+.test-results {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: $space-9 0 $space-10;
+  text-align: center;
+}
+
+.test-results-score {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  margin: 0 auto $space-6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: $font-display;
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.test-results p {
+  margin-top: $space-4;
+  color: $color-ink-soft;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.test-results-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: $space-7;
+  flex-wrap: wrap;
+}
+
+.test-missing {
+  text-align: center;
+  padding: $space-9 0;
+
+  p {
+    margin: $space-4 0 $space-6;
+    color: $color-ink-soft;
+  }
+}
+
+// ---- Mobile: the sidebar was way too tall/heavy on a phone screen ------
+// (full desktop-sized squares, labels, timer, and a legend block that
+// ate a full screen's worth of scroll before you even reached question
+// 1). Everything below only applies until the sidebar becomes a fixed
+// 300px column at $bp-lg — past that it's back to the normal desktop
+// sizing above.
+@media (max-width: 639px) {
+  .test-nav {
+    padding: $space-4;
+  }
+
+  .test-nav-title {
+    font-size: 14px;
+  }
+
+  .test-nav-back {
+    font-size: 11px;
+  }
+
+  .test-timer-value {
+    font-size: 13px;
+  }
+
+  .test-timer-pause {
+    width: 24px;
+    height: 24px;
+    font-size: 9px;
+  }
+
+  .test-nav-progress-label {
+    font-size: 11px;
+    margin-top: 8px;
+  }
+
+  .test-progress-bar {
+    margin-bottom: $space-4;
+  }
+
+  .question-group-label {
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+
+  .question-group {
+    margin-bottom: $space-3;
+  }
+
+  .question-grid {
+    grid-template-columns: repeat(auto-fill, 26px);
+    justify-content: start;
+    gap: 4px;
+  }
+
+  .q-num {
+    width: 26px;
+    height: 26px;
+    font-size: 9.5px;
+    border-radius: 6px;
+  }
+
+  .test-finish-btn {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+// ---- Floating passage window (draggable, resizable) -----------------------
+.floating-passage {
+  position: fixed;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.floating-passage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 8px 10px 16px;
+  background: $color-bg;
+  border-bottom: 1px solid $color-border;
+  cursor: move;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.floating-passage-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: $color-ink;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.floating-passage-close {
+  @include button-reset;
+  width: 26px;
+  height: 26px;
+  border-radius: $radius-sm;
+  color: $color-ink-soft;
+  font-size: 13px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.floating-passage-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: $space-5;
+
+  h3 {
+    font-size: 15px;
+    margin-bottom: $space-3;
+  }
+
+  .test-passage-text {
+    font-size: 13.5px;
+  }
+}
+
+.floating-passage-resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid $color-border;
+    border-bottom: 2px solid $color-border;
+  }
+
+  &:hover::after {
+    border-color: $color-primary;
+  }
+}

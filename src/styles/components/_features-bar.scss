@@ -1,0 +1,72 @@
+@use '../abstracts' as *;
+
+.features-bar {
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-xl - 2;
+  box-shadow: $shadow-card;
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 18px 4px;
+  margin: 8px 0 $space-9;
+
+  @include mq(sm) {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 26px 8px;
+  }
+  @include mq(lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.feature {
+  display: flex;
+  gap: 12px;
+  padding: 10px 4px;
+  border-left: none;
+
+  @include mq(sm) {
+    padding: 14px 18px;
+    border-left: 1px solid $color-border;
+
+    &:nth-child(odd) {
+      border-left: none;
+    }
+  }
+
+  @include mq(lg) {
+    padding: 0 22px;
+    border-left: 1px solid $color-border;
+
+    &:nth-child(odd) {
+      border-left: 1px solid $color-border;
+    }
+    &:first-child {
+      border-left: none;
+    }
+  }
+
+  .ico {
+    width: 38px;
+    height: 38px;
+    border-radius: $radius-sm;
+    background: $color-primary-light;
+    color: $color-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  h4 {
+    font-size: 14.5px;
+    font-weight: 700;
+  }
+
+  p {
+    font-size: 12.5px;
+    color: $color-gray;
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+}

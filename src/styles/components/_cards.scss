@@ -1,0 +1,232 @@
+@use '../abstracts' as *;
+
+// ---- Home page: EPM / EPD / EPE direction cards -----------------------
+.directions-grid {
+  display: none;
+  grid-template-columns: 1fr;
+  gap: $space-5;
+  margin-bottom: $space-9;
+
+  @include mq(lg) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.dir-card {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  border-radius: $radius-xl - 2;
+  padding: 22px 20px 24px;
+  border: 1px solid $color-border;
+  cursor: pointer;
+  @include hover-lift;
+
+  @include mq(sm) {
+    padding: 25px 24px 28px;
+  }
+
+  &.blue {
+    background: linear-gradient(160deg, $color-blue-light, #fff 60%);
+    .dir-icon {
+      background: $color-blue;
+    }
+    .sub,
+    .goto {
+      color: $color-blue;
+    }
+  }
+  &.violet {
+    background: linear-gradient(160deg, $color-violet-light, #fff 60%);
+    .dir-icon {
+      background: $color-violet;
+    }
+    .sub,
+    .goto {
+      color: $color-violet;
+    }
+  }
+  &.teal {
+    background: linear-gradient(160deg, $color-teal-light, #fff 60%);
+    .dir-icon {
+      background: $color-teal;
+    }
+    .sub,
+    .goto {
+      color: $color-teal;
+    }
+  }
+}
+
+.dir-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.dir-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-sm + 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.dir-card {
+  h3 {
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.25;
+
+    @include mq(sm) {
+      font-size: 16px;
+    }
+  }
+
+  .sub {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 1px;
+  }
+
+  p.desc {
+    font-size: 13.5px;
+    color: $color-ink-soft;
+    line-height: 1.55;
+    max-width: 92%;
+  }
+
+  .goto {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 13.5px;
+  }
+
+  .watermark {
+    position: absolute;
+    right: -6px;
+    bottom: -14px;
+    font-family: $font-display;
+    font-weight: 800;
+    font-size: 36px;
+    opacity: 0.08;
+    padding: 10px;
+
+    @include mq(sm) {
+      font-size: 46px;
+    }
+  }
+}
+
+// ---- Icon badge — shared by test cards and the test detail page --------
+// Color comes from per-exam modifier classes (.blue/.amber/.green,
+// same classes already used on .dir-card), so a badge dropped into any
+// exam-scoped container automatically gets the right tint.
+.test-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $space-4;
+  flex-shrink: 0;
+
+  &.large {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+.blue .test-icon-badge {
+  background: $color-blue-light;
+}
+.violet .test-icon-badge {
+  background: $color-violet-light;
+}
+.teal .test-icon-badge {
+  background: $color-teal-light;
+}
+
+// ---- Exam page: mock-test cards ----------------------------------------
+.tests-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-6;
+  padding-bottom: $space-10 - 2;
+
+  @include mq(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include mq(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.test-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-6;
+  @include hover-lift;
+
+  h4 {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  p {
+    font-size: 13.5px;
+    color: $color-ink-soft;
+    line-height: 1.55;
+    flex: 1; // pushes meta + button to the same baseline across a row
+  }
+}
+
+.test-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: $space-5;
+  padding-top: $space-4;
+  border-top: 1px solid $color-border;
+  font-size: 12.5px;
+  color: $color-gray;
+  font-weight: 600;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.test-card-cta {
+  display: block;
+  text-align: center;
+  margin-top: $space-5;
+  padding: 12px;
+  border-radius: $radius-sm;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  transition: filter 0.15s ease;
+}
+
+.test-card:hover .test-card-cta {
+  filter: brightness(0.93);
+}

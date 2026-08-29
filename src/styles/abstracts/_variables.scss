@@ -1,0 +1,123 @@
+// =============================================================
+// DESIGN TOKENS
+// Single source of truth for colors, spacing, breakpoints, etc.
+// Change values here — never hardcode them in component partials.
+// =============================================================
+
+// ---- Colors ----------------------------------------------------
+// $color-primary is the site's main brand color — logo, primary buttons,
+// links, focus rings, active nav state. It is DELIBERATELY a separate
+// token from any single exam's color, even though it happens to share
+// its value with $color-green below (green already meant "success" for
+// grading feedback, so reusing it as the brand color too is intentional,
+// not an accident — see the note on $color-green further down).
+$color-primary: #22a06b;
+$color-primary-dark: #177a50;
+$color-primary-light: #e6f7ee;
+
+// EPM's subject color. Kept named "blue" (not "epm") since it's used in
+// a few places as a plain color choice unrelated to the exam (e.g. link
+// color inside content), same reasoning as $color-green below.
+$color-blue: #3059e8;
+$color-blue-dark: #1e3fb0;
+$color-blue-light: #eaf0ff;
+
+// EPD's subject color.
+$color-violet: #6d5ae0;
+$color-violet-dark: #4c3bb5;
+$color-violet-light: #eeebfc;
+
+// EPE's subject color.
+$color-teal: #14a7a0;
+$color-teal-dark: #0e7e79;
+$color-teal-light: #e1f7f5;
+
+// Semantic amber — "partial credit" in grading, "Важно" callout boxes.
+// Not tied to any exam anymore (EPD used to be amber; that read as a
+// warning/failure color, which is exactly why it was moved to violet).
+$color-amber: #f2a537;
+$color-amber-dark: #c97f14;
+$color-amber-light: #fff4e2;
+
+// Semantic green — "correct" in grading, "official" pills, etc. Same
+// value as $color-primary on purpose (see above): one green for both
+// "this is the brand's main action color" and "this is correct/success"
+// keeps the palette tight instead of having two similar-but-different
+// greens fighting for attention.
+$color-green: #22a06b;
+$color-green-dark: #177a50;
+$color-green-light: #e6f7ee;
+
+$color-ink: #12203d;
+$color-ink-soft: #4b5875;
+$color-gray: #7a8699;
+
+$color-bg: #f7f9fc;
+$color-white: #ffffff;
+$color-border: #e6eaf2;
+
+// Per-exam color triplets, keyed the same way as src/data/examData.js
+// so components can look up { base, dark, light } by exam key.
+$exam-colors: (
+  epm: (
+    base: $color-blue,
+    dark: $color-blue-dark,
+    light: $color-blue-light,
+  ),
+  epd: (
+    base: $color-violet,
+    dark: $color-violet-dark,
+    light: $color-violet-light,
+  ),
+  epe: (
+    base: $color-teal,
+    dark: $color-teal-dark,
+    light: $color-teal-light,
+  ),
+);
+
+// ---- Radii & shadows --------------------------------------------
+$radius-sm: 10px;
+$radius-md: 14px;
+$radius-lg: 18px;
+$radius-xl: 22px;
+$radius-pill: 999px;
+
+$shadow-card: 0 8px 30px -10px rgba(18, 32, 61, 0.12);
+$shadow-modal: 0 30px 60px -20px rgba(18, 32, 61, 0.35);
+
+// ---- Spacing scale (multiples of 4px) ----------------------------
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-7: 32px;
+$space-8: 40px;
+$space-9: 56px;
+$space-10: 72px;
+
+// ---- Typography ---------------------------------------------------
+$font-display: 'Manrope', sans-serif;
+$font-body: 'Inter', sans-serif;
+
+// ---- Breakpoints ----------------------------------------------------
+// Used via the mq() mixin (abstracts/_mixins.scss), min-width based (mobile-first).
+$bp-xs: 400px; // very small phones
+$bp-sm: 640px; // burger nav collapses below this
+$bp-md: 768px; // container padding bumps to $container-padding-tablet here
+$bp-lg: 960px; // multi-column grids switch on
+$bp-xl: 1220px; // container padding maxes out + container stops growing
+
+// ---- Container / .main-wrapper ---------------------------------------
+$container-max-width: 1220px;
+$container-padding-mobile: 20px;
+$container-padding-tablet: 30px;
+$container-padding-desktop: 60px;
+
+// ---- Z-index scale ------------------------------------------------
+// Keep all z-indexes here so stacking order is visible at a glance.
+$z-header: 100;
+$z-mobile-nav: 150;
+$z-modal: 200;

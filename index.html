@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EP WONNA — Подготовка к экзаменам EP</title>
+    <meta name="description" content="Бесплатная платформа для подготовки к экзаменам EP в Австрии: пробники, теория, материалы по математике, немецкому и английскому языку." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Restores the real URL after the public/404.html redirect trick (GitHub Pages SPA support) -->
+    <script>
+      (function () {
+        var l = window.location;
+        if (l.search[1] === 'p' && l.search[2] === '=') {
+          var decoded = l.search.slice(3).split('&q=');
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) +
+              decoded[0].replace(/~and~/g, '&') +
+              (decoded[1] ? '?' + decoded[1].replace(/~and~/g, '&') : '') +
+              l.hash
+          );
+        }
+      })();
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

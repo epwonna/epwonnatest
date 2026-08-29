@@ -1,0 +1,140 @@
+import { createContext, useContext, useEffect, useState } from 'react'
+import { supabase } from '../lib/supabaseClient.js'
+
+const AuthContext = createContext(null)
+
+// See the identical helper (and comment) in services/testsService.js —
+// "Failed to fetch" means the request never reached Supabase at all
+// (bad/placeholder URL, dev server started before .env was filled in,
+// ad-blocker, offline), which deserves a clearer message than the raw
+// browser text.
+function toError(err) {
+  if (err instanceof TypeError && /fetch/i.test(err.message)) {
+    return new Error(
+      'Не удалось связаться с базой данных (Failed to fetch). Проверьте: 1) .env заполнен и dev-сервер ' +
+        'перезапущен после этого (npm run dev), 2) в нём нет опечаток в VITE_SUPABASE_URL, ' +
+        '3) блокировщики рекламы/антивирус не блокируют запросы к supabase.co.'
+    )
+  }
+  return err instanceof Error ? err : new Error(err?.message || 'Не удалось выполнить запрос.')
+}
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+  // The `profiles` row for the current user — holds `role` ('user' | 'admin').
+  // Every new signup gets a row with role='user' by default via the
+  // handle_new_user trigger in supabase/schema.sql; only a direct SQL
+  // update (`update profiles set role='admin' where email=...`) promotes
+  // someone to admin — there is no in-app way to self-promote, on purpose.
+  const [profile, setProfile] = useState(null)
+  const [profileLoading, setProfileLoading] = useState(false)
+
+  useEffect(() => {
+    supabase.auth
+      .getSession()
+      .then(({ data }) => setUser(data.session?.user ?? null))
+      .catch((err) => console.error('[AuthContext.getSession]', err))
+      .finally(() => setLoading(false))
+
+    // Keeps `user` in sync across tabs and after token refresh, sign-in,
+    // sign-out, etc. — anything that touches the session goes through
+    // this one listener instead of every call site updating state itself.
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => listener.subscription.unsubscribe()
+  }, [])
+
+  // Re-fetch the profile row whenever the logged-in user changes (login,
+  // logout, or switching accounts) — this is what RequireAdmin and the
+  // header's "Админка" link check.
+  useEffect(() => {
+    if (!user) {
+      setProfile(null)
+      return
+    }
+    let cancelled = false
+    setProfileLoading(true)
+    supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (cancelled) return
+        if (error) console.error('[AuthContext.profile]', error)
+        setProfile(data ?? null)
+      })
+      .catch((err) => {
+        if (!cancelled) console.error('[AuthContext.profile]', err)
+      })
+      .finally(() => {
+        if (!cancelled) setProfileLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [user])
+
+  async function signUp(email, password) {
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password })
+      if (error) throw error
+      return data
+    } catch (err) {
+      throw toError(err)
+    }
+  }
+
+  async function signIn(email, password) {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) throw error
+      return data
+    } catch (err) {
+      throw toError(err)
+    }
+  }
+
+  async function signOut() {
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+    } catch (err) {
+      throw toError(err)
+    }
+  }
+
+  // avatarKey is one of avatarOptions' ids (src/data/avatars.js) or null
+  // for "no avatar". Updates the DB and local state together so the
+  // circle in the header reflects the pick immediately, without waiting
+  // for a re-fetch.
+  async function updateAvatar(avatarKey) {
+    if (!user) return
+    try {
+      const { error } = await supabase.from('profiles').update({ avatar_key: avatarKey }).eq('id', user.id)
+      if (error) throw error
+      setProfile((prev) => (prev ? { ...prev, avatar_key: avatarKey } : prev))
+    } catch (err) {
+      throw toError(err)
+    }
+  }
+
+  const isAdmin = profile?.role === 'admin'
+
+  return (
+    <AuthContext.Provider
+      value={{ user, loading, profile, profileLoading, isAdmin, signUp, signIn, signOut, updateAvatar }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error('useAuth must be used inside <AuthProvider>')
+  return ctx
+}

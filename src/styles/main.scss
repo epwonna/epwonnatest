@@ -1,0 +1,40 @@
+// =============================================================
+// EP WONNA — stylesheet entry point
+//
+// Architecture (ITCSS-inspired, loaded low-specificity → high-specificity):
+//   abstracts/  design tokens + mixins, output no CSS on their own
+//   base/       resets & bare element defaults
+//   layout/     page-level structural pieces (container, header, footer)
+//   components/ reusable, self-contained UI pieces (buttons, cards, modal…)
+//   pages/      styles specific to a single page/route
+//
+// Adding something new:
+//   • a new color/spacing/breakpoint token → abstracts/_variables.scss
+//   • a new reusable mixin/function        → abstracts/_mixins.scss
+//   • a new shared UI piece (badge, input) → components/_<name>.scss
+//   • something only one page needs        → pages/_<page-name>.scss
+// Then add exactly one @use line below, in the matching section.
+// =============================================================
+
+@use './base/reset';
+
+@use './layout/container';
+@use './layout/header';
+@use './layout/footer';
+
+@use './components/buttons';
+@use './components/cards';
+@use './components/modal';
+@use './components/tabs';
+@use './components/features-bar';
+@use './components/filters';
+
+@use './pages/home';
+@use './pages/exam';
+@use './pages/about';
+@use './pages/test';
+@use './pages/oral';
+@use './pages/test-detail';
+@use './pages/admin';
+@use './pages/my-learning';
+@use './pages/dictionary';

@@ -1,0 +1,76 @@
+// =============================================================
+// MIXINS
+// =============================================================
+
+@use 'variables' as v;
+@use 'sass:map';
+
+// ---- Responsive breakpoint helper (mobile-first) -------------------
+// Usage: @include mq(md) { ... }  → applies from $bp-md and up.
+$breakpoints: (
+  xs: v.$bp-xs,
+  sm: v.$bp-sm,
+  md: v.$bp-md,
+  lg: v.$bp-lg,
+  xl: v.$bp-xl,
+);
+
+@mixin mq($name) {
+  $value: map.get($breakpoints, $name);
+  @if $value == null {
+    @warn "Unknown breakpoint `#{$name}`.";
+  } @else {
+    @media (min-width: $value) {
+      @content;
+    }
+  }
+}
+
+// ---- Main page container --------------------------------------------
+// Centers content, caps width at $container-max-width, and scales
+// horizontal padding by breakpoint: 20px (mobile) → 30px (tablet,
+// from $bp-md) → 60px (desktop, from $bp-xl).
+@mixin container {
+  width: 100%;
+  max-width: v.$container-max-width;
+  margin-inline: auto;
+  padding-inline: v.$container-padding-mobile;
+  box-sizing: border-box;
+
+  @include mq(md) {
+    padding-inline: v.$container-padding-tablet;
+  }
+  @include mq(xl) {
+    padding-inline: v.$container-padding-desktop;
+  }
+}
+
+// ---- Reset a <button> back to an unstyled inline element -------------
+// Apply this, then layer the component's own look on top.
+@mixin button-reset {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+// ---- Shared "lift on hover" interaction for cards ---------------------
+@mixin hover-lift {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: v.$shadow-card;
+  }
+}
+
+// ---- Look up an exam's color triplet from $exam-colors ----------------
+// Usage: background: exam-color(epm, base);
+@function exam-color($key, $variant) {
+  @return map.get(map.get(v.$exam-colors, $key), $variant);
+}

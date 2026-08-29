@@ -1,0 +1,196 @@
+@use '../abstracts' as *;
+
+.test-filters {
+  margin: $space-4 0 $space-5;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-3;
+
+  @include mq(sm) {
+    padding: $space-3 $space-4;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+// The phase switch (Письменная/Устная часть) — always visible, even
+// while the filter dropdowns are collapsed behind the mobile accordion,
+// since which phase you're looking at matters more than the filters do.
+.test-filters-leading {
+  margin-bottom: $space-3;
+
+  @include mq(sm) {
+    margin-bottom: 0;
+  }
+}
+
+// Mobile-only accordion trigger — "Фильтры" collapsed by default, so the
+// filter bar doesn't eat a screen's worth of space before the person
+// even sees a single пробник. Hidden from $bp-sm up, where there's
+// enough width to just show everything inline.
+.test-filters-toggle {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 6px;
+  font-weight: 700;
+  font-size: 14px;
+  color: $color-ink;
+
+  span {
+    flex: 1;
+    text-align: left;
+  }
+
+  @include mq(sm) {
+    display: none;
+  }
+}
+
+.test-filters-body {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: $space-3;
+
+  &.open {
+    display: flex;
+  }
+
+  @include mq(sm) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 0;
+    flex: 1 1 auto;
+  }
+}
+
+// ---- Custom dropdown (replaces native <select>) --------------------------
+// A native select's open popup is drawn by the browser/OS outside CSS's
+// reach — it can render wider than its own trigger and visually spill
+// past the card around it. This is real DOM instead, so the list can be
+// width-locked to the button that opens it (see .filter-dropdown-list).
+.filter-dropdown {
+  position: relative;
+  flex: 1 1 auto;
+
+  @include mq(sm) {
+    flex: 0 1 auto;
+  }
+}
+
+.filter-dropdown-trigger {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 170px;
+  padding: 11px 14px;
+  background: $color-bg;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  font-size: 16px;
+  font-weight: 600;
+  color: $color-ink;
+  transition: border-color 0.15s ease;
+
+  span {
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    border-color: $color-primary;
+  }
+
+  @include mq(sm) {
+    font-size: 13.5px;
+  }
+}
+
+.filter-chev {
+  flex-shrink: 0;
+  color: $color-gray;
+  transform: rotate(90deg);
+  transition: transform 0.15s ease;
+
+  &.open {
+    transform: rotate(-90deg);
+  }
+}
+
+.filter-dropdown-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 30;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+  padding: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.filter-dropdown-option {
+  @include button-reset;
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-ink;
+
+  &:hover {
+    background: $color-bg;
+  }
+
+  &.active {
+    background: $color-primary-light;
+    color: $color-primary-dark;
+  }
+}
+
+.filter-reset {
+  @include button-reset;
+  font-size: 13px;
+  font-weight: 700;
+  color: $color-gray;
+  padding: 9px 4px;
+  white-space: nowrap;
+
+  &:hover {
+    color: #b0332c;
+  }
+
+  @include mq(sm) {
+    margin-left: auto;
+  }
+}
+
+.tests-empty {
+  padding: $space-9 $space-5;
+  text-align: center;
+  color: $color-gray;
+  font-size: 14.5px;
+  background: #fff;
+  border: 1px dashed $color-border;
+  border-radius: $radius-lg;
+  margin-bottom: $space-10;
+}

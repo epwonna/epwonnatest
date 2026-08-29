@@ -1,0 +1,253 @@
+@use '../abstracts' as *;
+
+.mylearning-page {
+  padding: $space-5 0 $space-10;
+}
+
+.wip-banner {
+  background: $color-amber-light;
+  color: $color-amber-dark;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: $space-6;
+}
+
+.mylearning-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-6;
+
+  @include mq(lg) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.widget-card {
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-6;
+
+  h2 {
+    font-size: 16px;
+    margin-bottom: $space-5;
+  }
+
+  &.wide {
+    @include mq(lg) {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+// ---- Widget: progress by subject ---------------------------------------
+.subject-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+}
+
+.subject-progress-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subject-progress-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+}
+
+.subject-progress-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.subject-progress-label {
+  font-weight: 800;
+  color: $color-ink;
+}
+
+.subject-progress-count {
+  margin-left: auto;
+  color: $color-gray;
+  font-weight: 600;
+}
+
+.progress-bar {
+  height: 8px;
+  border-radius: $radius-pill;
+  background: $color-bg;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: $radius-pill;
+}
+
+.subject-progress-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: $color-gray;
+}
+
+// ---- Widget: recent tests ------------------------------------------------
+.recent-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recent-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: 'badge title score' '. date date';
+  align-items: center;
+  gap: 4px 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid $color-border;
+  font-size: 13px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @include mq(sm) {
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-areas: 'badge title score date';
+  }
+}
+
+.recent-badge {
+  grid-area: badge;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: $radius-pill;
+}
+
+.recent-title {
+  grid-area: title;
+  font-weight: 600;
+  color: $color-ink;
+}
+
+.recent-score {
+  grid-area: score;
+  font-weight: 800;
+  color: $color-ink;
+}
+
+.recent-date {
+  grid-area: date;
+  color: $color-gray;
+  font-size: 12px;
+  justify-self: end;
+}
+
+// ---- Widget: score trend chart --------------------------------------------
+.progress-chart {
+  width: 100%;
+  height: auto;
+  margin-top: $space-2;
+}
+
+// ---- Widget: my essays (essay_choice submissions) --------------------------
+.essay-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: $space-2;
+}
+
+.essay-item {
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: hidden;
+}
+
+.essay-item-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px 4px 14px;
+}
+
+.essay-item-head-toggle {
+  @include button-reset;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  border-radius: $radius-sm;
+
+  &:hover {
+    background: $color-bg;
+  }
+}
+
+.essay-item-delete {
+  @include button-reset;
+  width: 30px;
+  height: 30px;
+  border-radius: $radius-sm;
+  color: $color-gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  &:hover {
+    background: #fde9e9;
+    color: #b0332c;
+  }
+}
+
+.essay-item-title {
+  flex: 1;
+  text-align: left;
+  font-weight: 600;
+  color: $color-ink;
+  font-size: 13.5px;
+}
+
+.essay-item-date {
+  color: $color-gray;
+  font-size: 12px;
+}
+
+.essay-item-toggle {
+  color: $color-ink-soft;
+  font-size: 11px;
+}
+
+.essay-item-body {
+  padding: 14px;
+  border-top: 1px solid $color-border;
+  background: $color-bg;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: $color-ink;
+  white-space: pre-line;
+}

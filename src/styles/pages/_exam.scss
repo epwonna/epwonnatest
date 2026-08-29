@@ -1,0 +1,440 @@
+@use '../abstracts' as *;
+
+.exam-hero {
+  padding: 20px 0 0;
+
+  @include mq(sm) {
+    padding: 26px 0 0;
+  }
+}
+
+// Wraps the "Об экзамене" tab only — the illustration lives here, not in
+// .exam-hero, precisely so it never shows up on the "Пробники" tab.
+.about-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @include mq(lg) {
+    grid-template-columns: 1fr 360px;
+    align-items: start;
+    gap: $space-7;
+  }
+}
+
+// Decorative only — hidden below $bp-lg so it doesn't eat into the
+// mobile screen's very limited height budget above the fold.
+.exam-hero-art {
+  display: none;
+  position: relative;
+  height: 320px;
+
+  @include mq(lg) {
+    display: block;
+    position: sticky;
+    top: 96px;
+  }
+
+  .blob {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 55% 45%, rgba(228, 236, 255, 0.9) 0%, rgba(228, 236, 255, 0) 70%);
+  }
+
+  svg {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Real uploaded illustrations (currently just EPM — see ExamHeroArt.jsx)
+// have their own composition/background already baked in, so this variant
+// skips the .blob backdrop and lets height follow the image's own ratio
+// instead of the fixed height used for the generated placeholder scene.
+.exam-hero-art-image {
+  height: auto;
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: $radius-lg;
+  }
+}
+
+.exam-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+
+  @include mq(sm) {
+    gap: 12px;
+  }
+}
+
+.exam-tag {
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-md;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.exam-title {
+  h1 {
+    font-size: 16px;
+    font-family: $font-display;
+    font-weight: 800;
+
+    @include mq(sm) {
+      font-size: 19px;
+    }
+  }
+
+  p {
+    color: $color-gray;
+    font-size: 12px;
+    margin-top: 2px;
+
+    @include mq(sm) {
+      font-size: 12.5px;
+    }
+  }
+}
+
+// Segmented pill toggle for "Письменная часть / Устная часть" —
+// only rendered when exam.phases exists (currently EPD/EPE).
+.phase-switch {
+  display: inline-flex;
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-pill;
+  padding: 4px;
+  gap: 4px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.phase-switch-btn {
+  @include button-reset;
+  padding: 8px 18px;
+  border-radius: $radius-pill;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: $color-ink-soft;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &.active {
+    color: #fff;
+  }
+
+  &:not(.active):hover {
+    color: $color-ink;
+  }
+}
+
+.about-text {
+  max-width: 760px;
+  padding-bottom: $space-10 - 2;
+  font-size: 14px;
+  line-height: 1.8;
+  color: $color-ink-soft;
+
+  @include mq(sm) {
+    font-size: 15px;
+  }
+
+  h3 {
+    font-size: 16.5px;
+    color: $color-ink;
+    margin: 26px 0 10px;
+
+    @include mq(sm) {
+      font-size: 18px;
+    }
+  }
+
+  h4 {
+    font-size: 14.5px;
+    color: $color-ink;
+    margin: 20px 0 8px;
+
+    @include mq(sm) {
+      font-size: 15.5px;
+    }
+  }
+
+  h5,
+  h6 {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: $color-ink-soft;
+    margin: 14px 0 6px;
+
+    @include mq(sm) {
+      font-size: 14px;
+    }
+  }
+
+  .about-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  p {
+    margin-bottom: 10px;
+  }
+
+  ul,
+  ol {
+    padding-left: 20px;
+    margin-bottom: 10px;
+  }
+
+  li {
+    margin-bottom: 8px;
+
+    strong {
+      color: $color-ink;
+    }
+  }
+}
+
+.about-link {
+  font-weight: 700;
+  color: $color-primary;
+
+  &:hover {
+    color: $color-primary-dark;
+    text-decoration: underline;
+  }
+}
+
+.about-section:first-child h3 {
+  margin-top: 0;
+}
+
+// ---- Accordion card (depth-2 subsections, e.g. "Письменная часть" /
+// "Устная часть") — white, clickable, collapsed by default. Replaces the
+// old always-open box with a bluish border and near-transparent fill,
+// which read as "half-styled" rather than intentional.
+.about-accordion {
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  margin: $space-5 0;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &.open {
+    box-shadow: $shadow-card;
+  }
+
+  &.blue.open {
+    border-color: $color-blue-light;
+  }
+  &.violet.open {
+    border-color: $color-violet-light;
+  }
+  &.teal.open {
+    border-color: $color-teal-light;
+  }
+}
+
+.about-accordion-header {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: $space-4 $space-5;
+  text-align: left;
+
+  &:hover {
+    background: $color-bg;
+  }
+}
+
+.about-accordion-title {
+  flex: 1;
+  margin: 0;
+  font-size: 14.5px;
+  color: $color-ink;
+
+  @include mq(sm) {
+    font-size: 15.5px;
+  }
+}
+
+.about-accordion-chev {
+  flex-shrink: 0;
+  color: $color-gray;
+  transition: transform 0.15s ease;
+
+  &.open {
+    transform: rotate(90deg);
+  }
+}
+
+.about-accordion-body {
+  padding: 0 $space-5 $space-5;
+
+  > p:first-child,
+  > .about-note:first-child {
+    margin-top: 0;
+  }
+}
+
+// Nested sub-topics (Чтение / Аудирование / Грамматика / Письмо, etc.) —
+// tinted per exam instead of white, so they read as grouped "inside" the
+// white accordion card around them rather than blending into it.
+.about-subsection-deep {
+  border-radius: $radius-md;
+  padding: $space-4;
+  margin: $space-4 0 0;
+
+  > h5:first-child,
+  > h6:first-child {
+    margin-top: 0;
+  }
+
+  &.blue {
+    background: $color-blue-light;
+  }
+  &.violet {
+    background: $color-violet-light;
+  }
+  &.teal {
+    background: $color-teal-light;
+  }
+}
+
+// "Важно: ..." — tinted in the exam's own color instead of a fixed
+// warning-amber, so it reads as "this exam's important note", not as a
+// generic caution across every subject.
+.about-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border-radius: $radius-md;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.6;
+
+  @include mq(sm) {
+    font-size: 14px;
+  }
+
+  &.blue {
+    background: $color-blue-light;
+    color: $color-blue-dark;
+  }
+  &.violet {
+    background: $color-violet-light;
+    color: $color-violet-dark;
+  }
+  &.teal {
+    background: $color-teal-light;
+    color: $color-teal-dark;
+  }
+
+  .about-note-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}
+
+// ---- Numbered step cards (e.g. EPD's oral part: "1. Подготовка и
+// монолог" / "2. Спонтанный диалог") — an elevated card instead of the
+// plain boxed subsection, with a colored number badge and an optional
+// icon+label metadata badge (prep time, group icon for a dialogue, etc).
+.about-step {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-4;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  padding: $space-5;
+  margin: $space-5 0;
+}
+
+.about-step-number {
+  width: 34px;
+  height: 34px;
+  border-radius: $radius-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-display;
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+
+  &.blue {
+    background: $color-blue-light;
+    color: $color-blue-dark;
+  }
+  &.violet {
+    background: $color-violet-light;
+    color: $color-violet-dark;
+  }
+  &.teal {
+    background: $color-teal-light;
+    color: $color-teal-dark;
+  }
+}
+
+.about-step-body {
+  flex: 1;
+  min-width: 0;
+
+  h5 {
+    margin: 0 0 8px;
+    font-size: 15px;
+    color: $color-ink;
+
+    @include mq(sm) {
+      font-size: 16px;
+    }
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.about-step-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: $radius-pill;
+  font-size: 12.5px;
+  font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  &.blue {
+    background: $color-blue-light;
+    color: $color-blue-dark;
+  }
+  &.violet {
+    background: $color-violet-light;
+    color: $color-violet-dark;
+  }
+  &.teal {
+    background: $color-teal-light;
+    color: $color-teal-dark;
+  }
+}
+

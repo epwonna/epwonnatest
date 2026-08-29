@@ -1,0 +1,32 @@
+@use '../abstracts' as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: $radius-sm + 1;
+  font-weight: 700;
+  font-size: 14.5px;
+  border: 1.5px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.btn-primary {
+  background: $color-primary;
+  color: #fff;
+
+  &:hover {
+    background: $color-primary-dark;
+  }
+}
+
+.btn-outline {
+  border-color: $color-primary;
+  color: $color-primary;
+  background: #fff;
+
+  &:hover {
+    background: $color-primary-light;
+  }
+}

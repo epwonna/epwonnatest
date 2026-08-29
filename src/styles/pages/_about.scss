@@ -1,0 +1,61 @@
+@use '../abstracts' as *;
+
+.simple-page {
+  padding: 36px 0 60px;
+
+  @include mq(sm) {
+    padding: 60px 0 90px;
+  }
+
+  h1 {
+    font-size: 26px;
+
+    @include mq(sm) {
+      font-size: 34px;
+    }
+  }
+
+  .about-text {
+    margin-top: $space-6;
+    margin-bottom: $space-6;
+  }
+}
+
+.wip-badge {
+  display: inline-block;
+  background: $color-amber-light;
+  color: $color-amber-dark;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: $radius-pill;
+  margin-bottom: $space-4;
+}
+
+.uni-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-7;
+
+  @include mq(lg) {
+    grid-template-columns: 1fr 420px;
+    align-items: center;
+  }
+}
+
+.uni-hero-art {
+  display: none;
+  margin-top: $space-6;
+
+  @include mq(lg) {
+    display: block;
+    margin-top: 0;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-card;
+  }
+}

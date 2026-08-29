@@ -1,0 +1,4 @@
+// Barrel file: other partials do `@use '../abstracts' as *;`
+// and get every variable, mixin, and function in this folder.
+@forward 'variables';
+@forward 'mixins';

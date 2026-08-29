@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>EP WONNA</title>
+    <!--
+      GitHub Pages serves this file for any unknown path (e.g. /epm, /epd/about).
+      This script rewrites the URL into a query string and redirects to the real
+      index.html, where a matching script in index.html restores the original path.
+      This is the standard "spa-github-pages" trick.
+    -->
+    <script>
+      var segmentCount = 0; // set to 1 if you host under a repo subpath and want to preserve it, otherwise 0
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
+        l.pathname.slice(1).replace(/&/g, '~and~') +
+        (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body></body>
+</html>

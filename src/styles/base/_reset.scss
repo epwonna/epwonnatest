@@ -1,0 +1,100 @@
+@use '../abstracts' as *;
+
+// A few colors need to exist as real runtime CSS custom properties, not
+// just Sass variables — examData.js passes exam.color/exam.colorDark into
+// inline `style={{ background: ... }}`, and QuestionImage.jsx uses them
+// in inline SVGs. Generate the custom properties from the same Sass
+// tokens so there's one source of truth and they can't drift apart.
+:root {
+  --primary: #{$color-primary};
+  --primary-dark: #{$color-primary-dark};
+  --blue: #{$color-blue};
+  --blue-dark: #{$color-blue-dark};
+  --violet: #{$color-violet};
+  --violet-dark: #{$color-violet-dark};
+  --teal: #{$color-teal};
+  --teal-dark: #{$color-teal-dark};
+  --amber: #{$color-amber};
+  --amber-dark: #{$color-amber-dark};
+  --green: #{$color-green};
+  --green-dark: #{$color-green-dark};
+  --ink: #{$color-ink};
+  --ink-soft: #{$color-ink-soft};
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  overflow-x: hidden; // safety net against accidental horizontal scroll
+  width: 100%;
+  max-width: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: $font-body;
+  color: $color-ink;
+  background: $color-bg;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: $font-display;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+svg {
+  display: block;
+}
+
+// Buttons are used throughout as clickable cards/tabs (test cards, exam
+// tabs, burger, modal close). Reset the native look here once; each
+// component class re-applies its own appearance and always wins because
+// a class selector beats this element selector.
+button {
+  @include button-reset;
+}
+
+// Visually hidden but still available to screen readers.
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
