@@ -8,5 +8,5 @@ import react from '@vitejs/plugin-react'
 // custom domain, leave base as '/'.
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: '/epwonnatest/',
 })
