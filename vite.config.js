@@ -1,12 +1,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// IMPORTANT for GitHub Pages:
-// If you deploy to https://<username>.github.io/<repo-name>/ (a normal project repo),
-// set base to '/<repo-name>/' below, e.g. base: '/ep-wonna/'.
-// If you deploy to a user/organization page (https://<username>.github.io/) or a
-// custom domain, leave base as '/'.
+// Repo is "epwonna" → site lives at https://<username>.github.io/epwonna/,
+// hence the subpath base below. If a custom domain gets connected later
+// (via a CNAME file in public/), change this back to base: '/' — and
+// don't forget to also flip segmentCount back to 0 in public/404.html,
+// the two have to stay in sync.
 export default defineConfig({
   plugins: [react()],
-  base: '/epwonnatest/',
+  base: '/epwonna/',
 })

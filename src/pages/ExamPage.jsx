@@ -6,7 +6,7 @@ import TestFilters from '../components/TestFilters.jsx'
 import ExamIcon from '../components/ExamIcon.jsx'
 import ExamHeroArt from '../components/ExamHeroArt.jsx'
 import AboutSection from '../components/AboutSection.jsx'
-import { IconList, IconClock, IconShield } from '../components/Icons.jsx'
+import { IconList, IconClock, IconShield, IconPinFilled } from '../components/Icons.jsx'
 import { pluralizeRu } from '../utils/pluralize.js'
 
 // Resolves the `options: 'topics' | 'years'` shorthand in exam.filters
@@ -137,6 +137,11 @@ export default function ExamPage({ examKey, initialTab = 'tests' }) {
             <div className="tests-grid">
               {filteredTests.map((test) => (
                 <Link className={`test-card ${exam.className}`} to={`/${examKey}/probnik/${test.id}`} key={test.id}>
+                  {test.isPinned && (
+                    <span className="test-pinned-badge" title="Закреплён">
+                      <IconPinFilled size={13} />
+                    </span>
+                  )}
                   <div className="test-icon-badge">
                     <ExamIcon examKey={examKey} color={exam.color} size={22} />
                   </div>

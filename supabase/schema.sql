@@ -127,6 +127,11 @@ create table if not exists public.tests (
   -- instead of the real exam's 2). Shown with its own badge on the exam
   -- page instead of "Официальный/Неофициальный".
   is_model boolean not null default false,
+  -- Pinned tests always sort first on the exam page and in the admin
+  -- list, regardless of year/id — for whichever probnik should stay at
+  -- the top (e.g. the newest official one, or the one you want people
+  -- to try first).
+  is_pinned boolean not null default false,
   topic text,
   format text check (format in ('written', 'oral')),
   year int,
@@ -150,6 +155,7 @@ create table if not exists public.tests (
 -- Safe to re-run on a project whose `tests` table predates passages.
 alter table public.tests add column if not exists passages jsonb;
 alter table public.tests add column if not exists is_model boolean not null default false;
+alter table public.tests add column if not exists is_pinned boolean not null default false;
 
 create index if not exists tests_exam_key_idx on public.tests (exam_key);
 

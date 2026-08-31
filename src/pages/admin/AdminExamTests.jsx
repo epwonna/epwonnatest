@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { exams } from '../../data/examData.js'
-import { listTests, deleteTest } from '../../services/testsService.js'
+import { listTests, deleteTest, setPinned } from '../../services/testsService.js'
 import { pluralizeRu } from '../../utils/pluralize.js'
+import { IconPin, IconPinFilled } from '../../components/Icons.jsx'
 
 export default function AdminExamTests({ examKey }) {
   const exam = exams[examKey]
@@ -32,6 +33,23 @@ export default function AdminExamTests({ examKey }) {
       reload()
     } catch (err) {
       window.alert(err.message || 'Не удалось удалить пробник. Проверьте подключение к базе данных.')
+    }
+  }
+
+  async function handleTogglePin(test) {
+    const next = !test.isPinned
+    // Optimistic — re-sort immediately rather than waiting on a reload,
+    // since pin state is exactly what determines list order here.
+    setTests((prev) =>
+      prev
+        .map((t) => (t.id === test.id ? { ...t, isPinned: next } : t))
+        .sort((a, b) => Number(b.isPinned) - Number(a.isPinned))
+    )
+    try {
+      await setPinned(test.id, next)
+    } catch (err) {
+      window.alert(err.message || 'Не удалось закрепить пробник.')
+      reload()
     }
   }
 
@@ -88,7 +106,10 @@ export default function AdminExamTests({ examKey }) {
             const testPhase = exam.phases?.find((p) => p.value === test.format)
             return (
               <div className={'admin-table-row' + (exam.phases ? ' with-phase' : '')} key={test.id}>
-                <span className="admin-table-title">{test.title}</span>
+                <span className="admin-table-title">
+                  {test.title}
+                  {test.isPinned && <span className="admin-pill pinned">Закреплён</span>}
+                </span>
                 <span>
                   {test.format === 'oral'
                     ? `${test.oralTask?.stages.length ?? 0} ${pluralizeRu(test.oralTask?.stages.length ?? 0, ['этап', 'этапа', 'этапов'])}`
@@ -102,6 +123,15 @@ export default function AdminExamTests({ examKey }) {
                 <span>{test.year}</span>
                 {exam.phases && <span>{testPhase ? testPhase.label : '—'}</span>}
                 <span className="admin-table-actions">
+                  <button
+                    type="button"
+                    className={'admin-pin-btn' + (test.isPinned ? ' active' : '')}
+                    onClick={() => handleTogglePin(test)}
+                    aria-label={test.isPinned ? 'Открепить пробник' : 'Закрепить пробник наверху списка'}
+                    title={test.isPinned ? 'Открепить' : 'Закрепить наверху'}
+                  >
+                    {test.isPinned ? <IconPinFilled size={16} /> : <IconPin size={16} />}
+                  </button>
                   <Link className="btn btn-outline" to={`/admin/${examKey}/${test.id}`}>Редактировать</Link>
                   <button className="admin-delete-btn" onClick={() => handleDelete(test)} aria-label="Удалить">✕</button>
                 </span>

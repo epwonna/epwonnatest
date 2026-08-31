@@ -195,6 +195,41 @@
     color: $color-green-dark;
     border-color: transparent;
   }
+
+  &.pinned {
+    background: $color-amber-light;
+    color: $color-amber-dark;
+    border-color: transparent;
+  }
+}
+
+.admin-table-title .admin-pill {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.admin-pin-btn {
+  @include button-reset;
+  width: 34px;
+  height: 34px;
+  border-radius: $radius-sm;
+  border: 1.5px solid $color-border;
+  color: $color-gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  &:hover {
+    border-color: $color-amber;
+    color: $color-amber-dark;
+  }
+
+  &.active {
+    background: $color-amber-light;
+    border-color: $color-amber;
+    color: $color-amber-dark;
+  }
 }
 
 .admin-delete-btn {
@@ -594,6 +629,31 @@
   display: flex;
   flex-direction: column;
   gap: $space-3;
+}
+
+.admin-oral-stage {
+  background: #fff;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-bottom: $space-5;
+}
+
+.admin-oral-option {
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  select {
+    width: auto;
+  }
 }
 
 .admin-qa-row-head {

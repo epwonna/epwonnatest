@@ -12,6 +12,7 @@ import UniversityPage from './pages/UniversityPage.jsx'
 import MyLearning from './pages/MyLearning.jsx'
 import MyEssays from './pages/MyEssays.jsx'
 import Dictionary from './pages/Dictionary.jsx'
+import NotFound from './pages/NotFound.jsx'
 import AdminHome from './pages/admin/AdminHome.jsx'
 import AdminExamTests from './pages/admin/AdminExamTests.jsx'
 import AdminTestEditor from './pages/admin/AdminTestEditor.jsx'
@@ -81,7 +82,7 @@ export default function App() {
           <Route path="/admin/epe/new" element={<RequireAdmin><AdminTestEditor key="epe-new" examKey="epe" /></RequireAdmin>} />
           <Route path="/admin/epe/:testId" element={<RequireAdmin><AdminTestEditor key="epe" examKey="epe" /></RequireAdmin>} />
 
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
